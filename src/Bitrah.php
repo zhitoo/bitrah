@@ -50,6 +50,7 @@ class Bitrah
         if (empty($merchantId)) {
             throw new \Exception('Merchant ID is required');
         }
+
         $data = array(
             'merchantId' => config('bitrah.merchant_id'),
             'orderId' => $order_id,

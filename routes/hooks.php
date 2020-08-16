@@ -4,5 +4,5 @@ use Illuminate\Support\Facades\Route;
 use Hshafiei374\Bitrah\Http\Controllers\BitrahController;
 
 if (config('bitrah.define_default_webhook_url')) {
-    Route::post('/web_hook', [BitrahController::class, 'webHook'])->name('bitrah.webhook');
+    Route::post(config('bitrah.default_webhook_url_route'), [BitrahController::class, 'webHook'])->name('bitrah.webhook');
 }

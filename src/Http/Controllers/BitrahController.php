@@ -17,17 +17,20 @@ class BitrahController extends Controller
 
     public function callBack(Request $request)
     {
+        if (ucwords($request->method()) !== 'POST') {
+            abort(404);
+        };
         $bitrahTransaction = $this->bitrah->updateTransactionStatus($request->refId);
-        if(is_null($bitrahTransaction)){
+        if (is_null($bitrahTransaction)) {
             $message = trans('bitrah::messages.transaction_not_found');
             $refId = '';
-        }else {
+        } else {
             $message = trans('bitrah::messages.status.' . $bitrahTransaction->status);
             $refId = $bitrahTransaction->ref_id;
         }
         return view('bitrah::show', [
             'message' => $message,
-            'refId'=>$refId
+            'refId' => $refId
         ]);
     }
 
@@ -36,8 +39,8 @@ class BitrahController extends Controller
         $bitrahTransaction = $this->bitrah->updateTransactionStatus($request->refId);
         return response()->json([
             'refId' => $bitrahTransaction->ref_id,
-            'orderId' =>  $bitrahTransaction->order_id,
+            'orderId' => $bitrahTransaction->order_id,
             'status' => $bitrahTransaction->status
-        ],200);
+        ], 200);
     }
 }
