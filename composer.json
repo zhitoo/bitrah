@@ -1,0 +1,25 @@
+{
+    "name": "hshafiei374/bitrah",
+    "description": "bitrah gateway",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hossein Shafiei",
+            "email": "hshafiei374@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Hshafiei374\\Bitrah\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Hshafiei374\\Bitrah\\BitrahServiceProvider"
+            ]
+        }
+    }
+}
