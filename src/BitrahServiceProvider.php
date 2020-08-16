@@ -16,6 +16,7 @@ class BitrahServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'bitrah');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'bitrah');
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'bitrah');
     }
 
     /**
@@ -29,7 +30,9 @@ class BitrahServiceProvider extends ServiceProvider
             return new Bitrah();
         });
         if ($this->app->runningInConsole()) {
-
+            $this->publishes([
+                __DIR__.'/../resources/lang' => resource_path('lang/vendor/bitrah'),
+            ]);
             $this->publishes([
                 __DIR__ . '/../config/config.php' => config_path('bitrah.php'),
             ], 'config');

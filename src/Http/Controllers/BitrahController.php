@@ -18,8 +18,16 @@ class BitrahController extends Controller
     public function callBack(Request $request)
     {
         $bitrahTransaction = $this->bitrah->updateTransactionStatus($request->refId);
+        if(is_null($bitrahTransaction)){
+            $message = trans('bitrah::messages.transaction_not_found');
+            $refId = '';
+        }else {
+            $message = trans('bitrah::messages.status.' . $bitrahTransaction->status);
+            $refId = $bitrahTransaction->ref_id;
+        }
         return view('bitrah::show', [
-            'transaction' => $bitrahTransaction
+            'message' => $message,
+            'refId'=>$refId
         ]);
     }
 

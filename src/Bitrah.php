@@ -58,7 +58,7 @@ class Bitrah
             'webhookUrl' => $webhook_url
         );
         $response = $this->sendRequestToBitrah($data, 'Submit');
-        if (!$response['success']) {
+        if (!isset($response['success']) || !$response['success']) {
             throw new \Exception($response['message']);
         }
         $multiCoinRedirectUrl = $response['data']['multiCoinRedirectUrl'];
@@ -92,7 +92,7 @@ class Bitrah
             'refId' => $refId,
         );
         $response = $this->sendRequestToBitrah($data, 'Status');
-        if (!$response['success']) {
+        if (!isset($response['success']) || !$response['success']) {
             throw new \Exception($response['message']);
         }
         $bitrahTransaction = BitrahTransaction::where('ref_id', $refId)->first();
