@@ -19,7 +19,10 @@
         "laravel": {
             "providers": [
                 "Hshafiei374\\Bitrah\\BitrahServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Bitrah": "Hshafiei374\\Bitrah\\Facades\\Bitrah"
+            }
         }
     }
 }

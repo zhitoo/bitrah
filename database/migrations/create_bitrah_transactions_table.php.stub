@@ -1,0 +1,54 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateBitrahTransactionsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('bitrah_transactions', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('token', 64)->nullable();
+            $table->string('coin', 32)->nullable();
+            $table->double('value')->nullable();
+            $table->double('rial_value');
+            $table->string('callback_url', 191);
+            $table->string('webhook_url', 191);
+            /*
+             * شرح
+                status
+                    سفارش مشتری ثبت شده و مشتری در حال پرداخت است. بیت راه وضعیت تراکنش را در شبکه بررسی کرده و در صورت تأیید به سایت پذیرنده اعلام خواهد کرد.
+                    0
+                    مشتری سفارش خود را پرداخت کرده و تراکنش مذکور به تأیید شبکه رسیده است. بیت‌راه  پس از استعلام تأیید تراکنش وضعیت تأیید شده را ثبت کرده و به سایت پذیرنده اعلام می کند.
+                    1
+                    مشتری سفارش خود را پرداخت نکرده یا تراکنش مذکور در شبکه تأیید نشده است. پس از استعلام تأیید تراکنش وضعیت تأیید نشده را ثبت کرده و به سایت پذیرنده اعلام می کند.
+                    2
+                    مشتری سفارش خود را پرداخت کرده و تراکنش مذکور به تأیید شبکه رسیده است اما رقم پرداختی مشتری با رقم درخواستی مغایرت دارد.
+                    3
+                    سفارش مشتری منقضی شده است.
+                    4
+             * */
+            $table->enum('status', ['0', '1', '2', '3', '4'])->default('0');
+            $table->string('order_id', 64);
+            $table->string('ref_id', 64)->unique();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('bitrah_transactions');
+    }
+}
