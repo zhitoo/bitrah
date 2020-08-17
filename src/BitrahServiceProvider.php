@@ -26,7 +26,7 @@ class BitrahServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind('calculator', function($app) {
+        $this->app->bind('bitrah', function($app) {
             return new Bitrah();
         });
         if ($this->app->runningInConsole()) {
