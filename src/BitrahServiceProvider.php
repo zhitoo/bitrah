@@ -2,6 +2,7 @@
 
 namespace Hshafiei374\Bitrah;
 
+use Hshafiei374\Bitrah\Providers\EventServiceProvider;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
 

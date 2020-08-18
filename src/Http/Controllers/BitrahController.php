@@ -3,6 +3,7 @@
 namespace Hshafiei374\Bitrah\Http\Controllers;
 
 use Hshafiei374\Bitrah\Bitrah;
+use Hshafiei374\Bitrah\Events\UpdateBitrahTransactionStatusEvent;
 use Hshafiei374\Bitrah\Models\BitrahTransaction;
 use Illuminate\Http\Request;
 
@@ -21,6 +22,7 @@ class BitrahController extends Controller
             abort(404);
         };
         $bitrahTransaction = $this->bitrah->updateTransactionStatus($request->refId);
+        event(new UpdateBitrahTransactionStatusEvent($bitrahTransaction));
         if (is_null($bitrahTransaction)) {
             $message = trans('bitrah::messages.transaction_not_found');
             $refId = '';
@@ -37,6 +39,7 @@ class BitrahController extends Controller
     public function webHook(Request $request)
     {
         $bitrahTransaction = $this->bitrah->updateTransactionStatus($request->refId);
+        event(new UpdateBitrahTransactionStatusEvent($bitrahTransaction));
         return response()->json([
             'refId' => $bitrahTransaction->ref_id,
             'orderId' => $bitrahTransaction->order_id,

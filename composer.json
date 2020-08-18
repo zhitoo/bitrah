@@ -9,7 +9,10 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "php": ">=7.1",
+        "laravel/framework": ">=5"
+    },
     "autoload": {
         "psr-4": {
             "Hshafiei374\\Bitrah\\": "src"

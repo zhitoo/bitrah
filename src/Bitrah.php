@@ -4,6 +4,7 @@
 namespace Hshafiei374\Bitrah;
 
 
+use Hshafiei374\Bitrah\Events\UpdateBitrahTransactionStatusEvent;
 use Hshafiei374\Bitrah\Models\BitrahTransaction;
 
 class Bitrah
@@ -14,7 +15,7 @@ class Bitrah
      * @param string $type
      * @return mixed
      */
-    private function sendRequestToBitrah(array $params, string $type = 'Submit')
+    private function sendRequestToBitrah(array $params, $type = 'Submit')
     {
         $params = json_encode($params);
         $submitUrl = $type == 'Submit' ? config('bitrah.bitrah_submit_url') : config('bitrah.bitrah_status_url');
