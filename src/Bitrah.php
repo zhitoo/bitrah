@@ -20,9 +20,13 @@ class Bitrah
         $params = json_encode($params);
         $submitUrl = $type == 'Submit' ? config('bitrah.bitrah_submit_url') : config('bitrah.bitrah_status_url');
         $method = "POST";
+        $lang = config('bitrah.bitrah_gateway_language');
+        if($lang == 'fa'){
+            $lang = 'fa-IR';
+        }
         $headers = [
             "content-type:application/json",
-            "Accept-Language:" . config('bitrah.bitrah_gateway_language'),
+            "Accept-Language:" . $lang,
             "Content-Length:" . strlen($params)
         ];
         $ch = curl_init($submitUrl);
