@@ -2,7 +2,6 @@
 
 namespace Hshafiei374\Bitrah;
 
-use Hshafiei374\Bitrah\Providers\EventServiceProvider;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
@@ -15,9 +14,9 @@ class BitrahServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'bitrah');
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'bitrah');
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'bitrah');
+        $this->app->bind('bitrah', function ($app) {
+            return new Bitrah();
+        });
     }
 
     /**
@@ -27,19 +26,19 @@ class BitrahServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind('bitrah', function($app) {
-            return new Bitrah();
-        });
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'bitrah');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'bitrah');
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'bitrah');
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/bitrah'),
+                __DIR__ . '/../resources/lang' => base_path('resources/lang/vendor/bitrah'),
             ]);
             $this->publishes([
                 __DIR__ . '/../config/config.php' => config_path('bitrah.php'),
             ], 'config');
 
             $this->publishes([
-                __DIR__.'/../resources/views' => resource_path('views/vendor/bitrah'),
+                __DIR__ . '/../resources/views' => base_path('resources/views/vendor/bitrah'),
             ], 'views');
 
             if (!class_exists('CreateBitrahTransactionsTable')) {
@@ -52,16 +51,19 @@ class BitrahServiceProvider extends ServiceProvider
         }
         $this->registerRoutes();
     }
+
     protected function registerRoutes()
     {
         Route::group($this->webHookRouteConfiguration(), function () {
-            $this->loadRoutesFrom(__DIR__.'/../routes/hooks.php');
+            require __DIR__ . '/../routes/hooks.php';
         });
+
         Route::group($this->callBackRouteConfiguration(), function () {
-            $this->loadRoutesFrom(__DIR__.'/../routes/callbacks.php');
+            require __DIR__ . '/../routes/callbacks.php';
         });
 
     }
+
     protected function webHookRouteConfiguration()
     {
         return [
@@ -69,6 +71,7 @@ class BitrahServiceProvider extends ServiceProvider
             'middleware' => config('bitrah.default_webhook_url_route_middleware'),
         ];
     }
+
     protected function callBackRouteConfiguration()
     {
         return [

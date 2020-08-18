@@ -2,16 +2,17 @@
     "name": "hshafiei374/bitrah",
     "description": "bitrah gateway",
     "license": "MIT",
+    "keywords": ["laravel","laravel-gateway","laravel5-package","PHP","bitrah","bitrah-gateway"],
+    "homepage": "https://github.com/hshafiei374/bitrah",
     "authors": [
         {
             "name": "Hossein Shafiei",
             "email": "hshafiei374@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
-        "php": ">=7.1",
-        "laravel/framework": ">=5"
+        "php": "^7.1.3|7.2.*|7.3.*|7.4.*",
+        "laravel/framework": "~5.1|6.*|7.*"
     },
     "autoload": {
         "psr-4": {

@@ -11,7 +11,7 @@ return [
     'default_callback_url_route'=>'/callback_url',
     'default_webhook_url_route_prefix'=>'bitrah',
     'default_webhook_url_route'=>'/webhook_url',
-    'default_callback_url_route_middleware'=> ['api'] ,
-    'default_webhook_url_route_middleware'=> ['api'] ,
+    'default_callback_url_route_middleware'=> [] ,
+    'default_webhook_url_route_middleware'=> [] ,
 
 ];
