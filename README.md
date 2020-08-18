@@ -17,7 +17,6 @@ Bitrah is a [Laravel](http://laravel.com/) package that helping Laravel develope
 - [Getting Started](#getting-started)
 - [Code](#code)
 - [Documentation](#documentation)
-- [Contributing](#contributing)
 - [Changelog](#changelog)
 - [License](#license)
 
