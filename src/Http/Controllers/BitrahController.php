@@ -18,9 +18,10 @@ class BitrahController extends Controller
 
     public function callBack(Request $request)
     {
-        if (ucwords($request->method()) !== 'POST') {
+        if (ucwords($request->method()) !== Request::METHOD_POST) {
             abort(404);
         };
+
         $bitrahTransaction = $this->bitrah->updateTransactionStatus($request->refId);
         event(new UpdateBitrahTransactionStatusEvent($bitrahTransaction));
         if (is_null($bitrahTransaction)) {
