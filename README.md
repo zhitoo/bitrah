@@ -85,7 +85,7 @@ $table->bigIncrements('id');
 ```
 
 ## Documentation
-You can find more information about Sanjab in [documentation](https://www.bitrah.ir/en/doc).
+You can find more information about Bitrah in [documentation](https://www.bitrah.ir/en/doc).
 
 
 ## Changelog
