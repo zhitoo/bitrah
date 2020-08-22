@@ -29,7 +29,12 @@ Bitrah is a [Laravel](http://laravel.com/) package that helping Laravel develope
 * Store and Update All Transactions in data base automatically
 
 ## Getting Started
-First, you should install bitrah on your Laravel project. Read installation guide here [Here](https://bitrah.ir).
+First, you should install bitrah on your Laravel project. 
+```
+composer require hshafiei374/bitrah
+```
+If use laravel < 5.4 put your webhook and callback url to VerifyCsrfToken $except array
+
 
 ## Code
 It is easy to use.
