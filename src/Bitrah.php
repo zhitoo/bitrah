@@ -3,111 +3,61 @@
 
 namespace Hshafiei374\Bitrah;
 
-
-use Hshafiei374\Bitrah\Events\UpdateBitrahTransactionStatusEvent;
-use Hshafiei374\Bitrah\Models\BitrahTransaction;
-
 class Bitrah
 {
-
-    /**
-     * @param array $params string
-     * @param string $type
-     * @return mixed
-     */
-    private function sendRequestToBitrah(array $params, $type = 'Submit')
+    private function login()
     {
-        $params = json_encode($params);
-        $submitUrl = $type == 'Submit' ? config('bitrah.bitrah_submit_url') : config('bitrah.bitrah_status_url');
-        $method = "POST";
-        $lang = config('bitrah.bitrah_gateway_language');
-        if($lang == 'fa'){
-            $lang = 'fa-IR';
-        }
-        $headers = [
-            "content-type:application/json",
-            "Accept-Language:" . $lang,
-            "Content-Length:" . strlen($params)
-        ];
-        $ch = curl_init($submitUrl);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        $post = json_encode([
+            'username' => config('bitrah.username'),
+            'password' => config('bitrah.password'),
+        ]);
+
+        $ch = curl_init(config('bitrah.bitrah_base_url') . 'authentication/login');
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt(
             $ch,
             CURLOPT_HTTPHEADER,
-            $headers
+            [
+                'Content-Type: application/json',
+                'accept-language: ' . config('bitrah.bitrah_gateway_language'),
+                'Content-Length: ' . strlen($post)
+            ]
+        );
+
+        $result = curl_exec($ch);
+        $data = json_decode($result, true);
+
+        return $data['data']['token'];
+    }
+
+    public function submitRequest($order_id, $rial_value, $callback_url = null, $webhook_url = null)
+    {
+        $callback_url = is_null($callback_url) ? config('bitrah.call_back_url') : $callback_url;
+        $webhook_url = is_null($webhook_url) ? config('bitrah.webhook_url') : $webhook_url;
+        $post = json_encode([
+            'orderId' => $order_id,
+            'merchantId' => config('bitrah.merchant_id'),
+            'rialValue' => $rial_value,
+            'webhookUrl' => $webhook_url,
+            'callbackUrl' => $callback_url,
+        ]);
+        $ch = curl_init(config('bitrah.bitrah_base_url') . 'order/submit/wr');
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            [
+                'Content-Type: application/json',
+                'accept-language: ' . config('bitrah.bitrah_gateway_language'),
+                'Content-Length: ' . strlen($post),
+                'Authentication: bearer ' . $this->login(),
+            ]
         );
         $result = curl_exec($ch);
         return json_decode($result, true);
-    }
-
-    public function submitRequest($order_id, $rial_value, $callback_url = '', $webhook_url = '')
-    {
-
-        if (empty($callback_url) && config('bitrah.define_default_callback_url')) {
-            $callback_url = route('bitrah.callback');
-        }
-        if (empty($webhook_url) && config('bitrah.define_default_webhook_url')) {
-            $webhook_url = route('bitrah.webhook');
-        }
-        $merchantId = config('bitrah.merchant_id');
-        if (empty($merchantId)) {
-            throw new \Exception('Merchant ID is required');
-        }
-
-        $data = array(
-            'merchantId' => config('bitrah.merchant_id'),
-            'orderId' => $order_id,
-            'rialValue' => $rial_value,
-            'callbackUrl' => $callback_url,
-            'webhookUrl' => $webhook_url
-        );
-        $response = $this->sendRequestToBitrah($data, 'Submit');
-        if (!isset($response['success']) || !$response['success']) {
-            throw new \Exception($response['message']);
-        }
-        $multiCoinRedirectUrl = $response['data']['multiCoinRedirectUrl'];
-        $bitrahTransaction = new BitrahTransaction();
-        $bitrahTransaction->token = $response['data']['token'];
-        $bitrahTransaction->ref_id = $response['data']['refId'];
-        $bitrahTransaction->order_id = $order_id;
-        $bitrahTransaction->rial_value = $rial_value;
-        $bitrahTransaction->callback_url = $callback_url;
-        $bitrahTransaction->webhook_url = $webhook_url;
-        $bitrahTransaction->status = "0";
-        $bitrahTransaction->save();
-        header('Location: ' . $multiCoinRedirectUrl);
-        exit();
-    }
-
-    public function updateTransactionStatus($refId)
-    {
-        if (empty($callback_url) && config('bitrah.define_default_callback_url')) {
-            $callback_url = route('bitrah.callback');
-        }
-        if (empty($webhook_url) && config('bitrah.define_default_webhook_url')) {
-            $webhook_url = route('bitrah.webhook');
-        }
-        $merchantId = config('bitrah.merchant_id');
-        if (empty($merchantId)) {
-            throw new \Exception('Merchant ID is required');
-        }
-        $data = array(
-            'merchantId' => config('bitrah.merchant_id'),
-            'refId' => $refId,
-        );
-        $response = $this->sendRequestToBitrah($data, 'Status');
-        if (!isset($response['success']) || !$response['success']) {
-            throw new \Exception($response['message']);
-        }
-        $bitrahTransaction = BitrahTransaction::where('ref_id', $refId)->first();
-        if(!is_null($bitrahTransaction)){
-            $bitrahTransaction->status = $response['data']['status'];
-            $bitrahTransaction->coin = $response['data']['coin'];
-            $bitrahTransaction->value = $response['data']['value'];
-            $bitrahTransaction->save();
-        }
-        return $bitrahTransaction;
     }
 }
