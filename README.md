@@ -25,25 +25,23 @@ Bitrah is a [Laravel](http://laravel.com/) package that helping Laravel develope
 
 
 ## Features
-* Easy yet powerful.
+* بسیار ساده و قدرتمند
 
 ## Getting Started
-First, you should install bitrah on your Laravel project. 
-پکیج را با دستور زیر نصب میکنیم
+پکیج را با دستور زیر نصب میکنیم 
 ```
 composer require hshafiei374/bitrah
 ```
-If use laravel < 5.4 put your webhook and callback url to VerifyCsrfToken $except array
+
 اگر ورژن لاراول شما کمتر از 5.4 است باید وب هوک و کال بک را در آرایه ی $except در کلاس VerifyCsrfToken قرار دهید.
 
 
 ## Code
-It is easy to use.
-
-Send a Request to Bitrah:
-با استفاده از کد زیر یک درخواست به بیتراه میفرستیم
+بااستفاده از کد زیر یک درخواست به بیتراه میفرستیم
 ```php
 $result = Bitrah::submitRequest(orderId '1',rialValue '270000000', callbackurl 'http://your-domain.com/bitrah_call_back', webhookkurl 'http://your-domain.com/bitrah_webhook');
+/*
+$result is : 
 [
 'data'=>[
         'token'=>'0d0cd5a0445647asdasdcff2c48ad69e7',
@@ -55,31 +53,28 @@ $result = Bitrah::submitRequest(orderId '1',rialValue '270000000', callbackurl '
 'timesatmp'=>'2020-11-14T06:56:43.646+0000',
 'success'=>'true'
 ];
+*/
 ```
-you must store token and refId to your database and if exists token and refId before mean 
+
 شما باید اطلاعات گرفته شده از بیتراه را در دیتا بیس خود ذخیره کنید و چک کنید اگر قبلا refId و token در دیتا بیس شما وجود نداشته باشد.
-you must redirect to multiCoinRedirectUrl or redirectUrl
+
 سپس باید کاربر را به url دریافتی از بیتراه هدایت کنید.
-Then we enter the ‌Bitrah gateway 
+
 کاربر وارد صفحه پرداخت بیتراه می شود
 
 ![Code](./images/bitrah1.jpeg)
 
-After the payment, bitrah call the callback url
-بعد از پرداخت کاربر به لینک callback سایت شما باز می گردد.
+
+بعد از پرداخت کاربر به لینک کالبک سایت شما باز می گردد.
 در این مرحله شما باید چک کنید که این درخواست قبلا پردازش نشده باشد.
 
-And when the transaction is confirmed on the network, the web hook is executed
 در نهایت بعد از تایید پرداخت وب هوک شما توسط بیتراه صدا زده می شود.
 
 ## Documentation
-داکیومنت بیتراه
-You can find more information about Bitrah in [documentation](https://www.bitrah.ir/en/doc).
-
-
+[documentation](https://www.bitrah.ir/en/doc).
 ## Changelog
 ## v1.0.0
-* submit a request and update transaction status.
+* پیاده سازی درخواست
 
 
 ## License
