@@ -5,6 +5,9 @@ namespace Hshafiei374\Bitrah;
 
 class Bitrah
 {
+    /**
+     * @return mixed
+     */
     private function login()
     {
         $post = json_encode([
@@ -32,6 +35,15 @@ class Bitrah
         return $data['data']['token'];
     }
 
+
+    /**
+     * sending request to bitrah for payment
+     * @param $order_id
+     * @param $rial_value
+     * @param null $callback_url
+     * @param null $webhook_url
+     * @return mixed
+     */
     public function submitRequest($order_id, $rial_value, $callback_url = null, $webhook_url = null)
     {
         $callback_url = is_null($callback_url) ? config('bitrah.call_back_url') : $callback_url;
