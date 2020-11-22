@@ -70,6 +70,28 @@ $result is :
 
 در نهایت بعد از تایید پرداخت وب هوک شما توسط بیتراه صدا زده می شود.
 
+
+شما همچنین می توانید با استفاده از متد زیر در هر زمانی وضعیت تراکنش خود را با استفاده از refId مشخص کنید
+
+```php
+$result = Bitrah::getTransactionStatus($refId);
+/*
+$result is: 
+array:4 [▼
+  "data" => array:5 [▼
+    "status" => 2
+    "orderId" => "1"
+    "refId" => "4805"
+    "coin" => "TRX"
+    "value" => "3.293901000"
+  ]
+  "message" => "Successfully done!"
+  "timestamp" => "2020-11-22T07:16:15.936+0000"
+  "success" => true
+]
+*/
+```
+
 ## Documentation
 [documentation](https://www.bitrah.ir/en/doc).
 ## Changelog

@@ -55,7 +55,36 @@ class Bitrah
             'webhookUrl' => $webhook_url,
             'callbackUrl' => $callback_url,
         ]);
-        $ch = curl_init(config('bitrah.bitrah_base_url') . 'order/submit/wr');
+        $ch = curl_init(config('bitrah.bitrah_base_url') . config('bitrah.bitrah_submit_url'));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            [
+                'Content-Type: application/json',
+                'accept-language: ' . config('bitrah.bitrah_gateway_language'),
+                'Content-Length: ' . strlen($post),
+                'Authentication: bearer ' . $this->login(),
+            ]
+        );
+        $result = curl_exec($ch);
+        return json_decode($result, true);
+    }
+
+    /**
+     * get transaction status
+     * @param $refId string
+     * @return mixed
+     */
+    public function getTransactionStatus($refId)
+    {
+        $post = json_encode([
+            'refId' => $refId,
+            'merchantId' => config('bitrah.merchant_id')
+        ]);
+        $ch = curl_init(config('bitrah.bitrah_base_url') . config('bitrah.bitrah_status_url'));
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
